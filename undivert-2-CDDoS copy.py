@@ -1,14 +1,31 @@
+import http.client, os, json
+from dotenv import load_dotenv
 
+load_dotenv(override=True)
 
-import http.client
-import json
+api_key = os.getenv('API_KEY')
+account_id = os.getenv('ACCOUNT_ID')
 
-conn = http.client.HTTPSConnection("api.radwarecloud.app")
+#test variables
+print("--"*44)
+if api_key:
+    print(f"API Key: {api_key[:6]}\n\n")
+else:
+    print("API Key not found in environment variables.\n\n")
+if account_id:
+    print(f"API Key: {account_id[:6]}\n\n")
+else:
+    print("Account ID not found in environment variables.\n")
+print("--"*44)
+api_url= "api.radwarecloud.app"
+asset_endpoint = "69d3c9496bdd502e2f6c2ce7"
+
+conn = http.client.HTTPSConnection(api_url)
 payload = json.dumps({
   "assets": [
     {
       "_id": {
-        "_oid": "69d3c9496bdd502e2f6c2ce7"
+        "_oid": asset_endpoint
       },
       "type": "server"
     }
@@ -16,10 +33,10 @@ payload = json.dumps({
   "additional_email_text": "Test from Virg"
 })
 headers = {
-  'x-api-key': 'eyJhbGciOiJIUzM4NCJ9.eyJhY2NvdW50SWQiOnsidmFsdWUiOiI2NDQ1NDkxNzUyZmVkODZjZmVjNTJhMjUifSwicm9sZUlkcyI6WyJyb2xfeFpuQUcxbXJQdkdWZmQ3cSIsInJvbF9oNk1CVmtZR3F5U1czTUIzIiwicm9sX21yMko4V2VjSTJReFNNUmciLCJyb2xfaGtCdE8yUVZFVHdBNlBONSIsInJvbF9UaGNJYTVQQW9vNkxaeUFJIl0sImV4cGlyeVRpbWVzdGFtcCI6MTgzODE3NDQwMCwiaWQiOnsidmFsdWUiOiI2OWQzYzc1NDg4OWFjYjIxN2Y3NjU3ZmUifX0.wud1VLS9GQHjm6Je9L5eAH2C3SGGsvGrLYQLZrB9lBSIRKjO2q6fUtxZYQnTwZcT',
+  'x-api-key': api_key,
   'Content-Type': 'application/json'
 }
-conn.request("POST", "//api/assets/deactivate/?isDivert=true&type=account&id=62e1528e6d1ad213fcbc93a6", payload, headers)
+conn.request("POST", f"//api/assets/deactivate/?isDivert=true&type=account&id={account_id}", payload, headers)
 res = conn.getresponse()
 data = res.read()
 print(data.decode("utf-8"))
