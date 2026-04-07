@@ -20,6 +20,7 @@ else:
     print("Account ID not found in environment variables.\n\n")
 print("--"*44)
 api_url= "api.radwarecloud.app"
+# Replace asset_endpoint with your own endpoint
 asset_endpoint = "69d3c9496bdd502e2f6c2ce7"
 
 
